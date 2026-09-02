@@ -21,11 +21,12 @@
 Especialistas en afinación, diagnóstico y reparación automotriz. Calidad y confianza en cada proyecto.
 
 ## 📁 Contenido del Repositorio
+   https://github.com/S-I-D-C
 
 <p align="center">
   <img src="https://docs.github.com/?search-overlay-open=true&search-overlay-ask-ai=true&search-overlay-input=https%3A%2F%2Fgithub.com%2Fsuministrosintegralesdc%2FCertificaciones-ECU-VW%2Ftree%2Fmain"
 
----
+---https://github.com/S-I-D-C
 
 <p align="center">© 2026 DC tune HC Studio — Todos los derechos reservados</p>
 
