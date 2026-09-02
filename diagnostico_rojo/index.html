@@ -25,11 +25,88 @@
       <button class="secondary-button" id="toggleMonitoring" type="button"><span class="pulse-icon"></span>Iniciar monitoreo</button>
     </section>
 
-    <section class="metrics" aria-label="Lecturas principales">
-      <article class="metric-card"><span class="metric-label">Voltaje batería</span><strong id="metricBattery">12.6 V</strong><span class="metric-state good">● Óptimo</span></article>
-      <article class="metric-card"><span class="metric-label">RPM motor</span><strong id="metricRpm">850</strong><span class="metric-state good">● Estable</span></article>
-      <article class="metric-card"><span class="metric-label">Temperatura CLT</span><strong id="metricTemp">88 °C</strong><span class="metric-state good">● Normal</span></article>
-      <article class="metric-card"><span class="metric-label">Mezcla lambda</span><strong id="metricAfr">14.7 : 1</strong><span class="metric-state good">● Correcta</span></article>
+    <section class="sensor-grid" aria-label="Sensores en tiempo real">
+      <article class="sensor-tile" data-sensor="battery" data-label="Voltaje Batería" data-unit="V" data-min="10" data-max="16" data-color="#d18bff" data-pid="0142" style="--c:#d18bff">
+        <div class="tile-accent"></div>
+        <div class="tile-body">
+          <div class="tile-top"><span class="tile-name">Voltaje Batería</span><span class="tile-pid">0142</span></div>
+          <div class="tile-readout"><strong class="tile-val">12.6</strong><span class="tile-unit">V</span></div>
+          <div class="tile-bar"><div class="tile-bar-fill" style="width:43%"></div></div>
+          <div class="tile-bottom"><span class="tile-range">10 – 16</span><span class="tile-expand">⤢</span></div>
+        </div>
+      </article>
+      <article class="sensor-tile" data-sensor="rpm" data-label="RPM Motor" data-unit="RPM" data-min="0" data-max="6500" data-color="#ff633d" data-pid="010C" style="--c:#ff633d">
+        <div class="tile-accent"></div>
+        <div class="tile-body">
+          <div class="tile-top"><span class="tile-name">RPM Motor</span><span class="tile-pid">010C</span></div>
+          <div class="tile-readout"><strong class="tile-val">850</strong><span class="tile-unit">RPM</span></div>
+          <div class="tile-bar"><div class="tile-bar-fill" style="width:13%"></div></div>
+          <div class="tile-bottom"><span class="tile-range">0 – 6500</span><span class="tile-expand">⤢</span></div>
+        </div>
+      </article>
+      <article class="sensor-tile" data-sensor="map" data-label="MAP / Admisión" data-unit="kPa" data-min="0" data-max="255" data-color="#80aaff" data-pid="010B" style="--c:#80aaff">
+        <div class="tile-accent"></div>
+        <div class="tile-body">
+          <div class="tile-top"><span class="tile-name">MAP / Admisión</span><span class="tile-pid">010B</span></div>
+          <div class="tile-readout"><strong class="tile-val">38</strong><span class="tile-unit">kPa</span></div>
+          <div class="tile-bar"><div class="tile-bar-fill" style="width:15%"></div></div>
+          <div class="tile-bottom"><span class="tile-range">0 – 255</span><span class="tile-expand">⤢</span></div>
+        </div>
+      </article>
+      <article class="sensor-tile" data-sensor="temp" data-label="Temp. Refrigerante" data-unit="°C" data-min="40" data-max="130" data-color="#ffc247" data-pid="0105" style="--c:#ffc247">
+        <div class="tile-accent"></div>
+        <div class="tile-body">
+          <div class="tile-top"><span class="tile-name">Temp. Refrigerante</span><span class="tile-pid">0105</span></div>
+          <div class="tile-readout"><strong class="tile-val">88</strong><span class="tile-unit">°C</span></div>
+          <div class="tile-bar"><div class="tile-bar-fill" style="width:53%"></div></div>
+          <div class="tile-bottom"><span class="tile-range">40 – 130</span><span class="tile-expand">⤢</span></div>
+        </div>
+      </article>
+      <article class="sensor-tile" data-sensor="tps" data-label="Posición TPS" data-unit="%" data-min="0" data-max="100" data-color="#21e6d0" data-pid="0111" style="--c:#21e6d0">
+        <div class="tile-accent"></div>
+        <div class="tile-body">
+          <div class="tile-top"><span class="tile-name">Posición TPS</span><span class="tile-pid">0111</span></div>
+          <div class="tile-readout"><strong class="tile-val">3.4</strong><span class="tile-unit">%</span></div>
+          <div class="tile-bar"><div class="tile-bar-fill" style="width:3%"></div></div>
+          <div class="tile-bottom"><span class="tile-range">0 – 100</span><span class="tile-expand">⤢</span></div>
+        </div>
+      </article>
+      <article class="sensor-tile" data-sensor="afr" data-label="Mezcla AFR" data-unit=":1" data-min="10" data-max="20" data-color="#ff7bba" data-pid="0134" style="--c:#ff7bba">
+        <div class="tile-accent"></div>
+        <div class="tile-body">
+          <div class="tile-top"><span class="tile-name">Mezcla AFR</span><span class="tile-pid">0134</span></div>
+          <div class="tile-readout"><strong class="tile-val">14.7</strong><span class="tile-unit">:1</span></div>
+          <div class="tile-bar"><div class="tile-bar-fill" style="width:47%"></div></div>
+          <div class="tile-bottom"><span class="tile-range">10 – 20</span><span class="tile-expand">⤢</span></div>
+        </div>
+      </article>
+      <article class="sensor-tile" data-sensor="pw1" data-label="Tiempo Inyección" data-unit="ms" data-min="0" data-max="20" data-color="#58b8ff" data-pid="—">
+        <div class="tile-accent"></div>
+        <div class="tile-body">
+          <div class="tile-top"><span class="tile-name">Tiempo Inyección</span><span class="tile-pid">PW1</span></div>
+          <div class="tile-readout"><strong class="tile-val">2.8</strong><span class="tile-unit">ms</span></div>
+          <div class="tile-bar"><div class="tile-bar-fill" style="width:14%"></div></div>
+          <div class="tile-bottom"><span class="tile-range">0 – 20</span><span class="tile-expand">⤢</span></div>
+        </div>
+      </article>
+      <article class="sensor-tile" data-sensor="advance" data-label="Avance Encendido" data-unit="°" data-min="-10" data-max="50" data-color="#51e58d" data-pid="—">
+        <div class="tile-accent"></div>
+        <div class="tile-body">
+          <div class="tile-top"><span class="tile-name">Avance Encendido</span><span class="tile-pid">ADV</span></div>
+          <div class="tile-readout"><strong class="tile-val">12.0</strong><span class="tile-unit">°</span></div>
+          <div class="tile-bar"><div class="tile-bar-fill" style="width:37%"></div></div>
+          <div class="tile-bottom"><span class="tile-range">-10 – 50</span><span class="tile-expand">⤢</span></div>
+        </div>
+      </article>
+      <article class="sensor-tile" data-sensor="iat" data-label="Temp. Aire Admisión" data-unit="°C" data-min="-10" data-max="100" data-color="#19d9ff" data-pid="010F" style="--c:#19d9ff">
+        <div class="tile-accent"></div>
+        <div class="tile-body">
+          <div class="tile-top"><span class="tile-name">Aire Admisión</span><span class="tile-pid">010F</span></div>
+          <div class="tile-readout"><strong class="tile-val">31</strong><span class="tile-unit">°C</span></div>
+          <div class="tile-bar"><div class="tile-bar-fill" style="width:37%"></div></div>
+          <div class="tile-bottom"><span class="tile-range">-10 – 100</span><span class="tile-expand">⤢</span></div>
+        </div>
+      </article>
     </section>
 
     <div class="content-grid">
@@ -87,6 +164,31 @@
       </aside>
     </div>
   </main>
+
+  <div class="sensor-fullscreen" id="sensorFullscreen" hidden>
+    <div class="fs-header">
+      <div>
+        <p class="fs-kicker" id="fsPid">PID</p>
+        <h2 class="fs-title" id="fsTitle">Sensor</h2>
+      </div>
+      <button class="fs-close" id="fsClose" type="button">CERRAR ×</button>
+    </div>
+    <div class="fs-hero">
+      <strong class="fs-value" id="fsValue">0</strong>
+      <span class="fs-unit" id="fsUnit">unit</span>
+    </div>
+    <div class="fs-bar-wrap">
+      <div class="fs-bar"><div class="fs-bar-fill" id="fsBarFill"></div></div>
+      <div class="fs-scale"><span id="fsMin">0</span><span>rango operativo</span><span id="fsMax">100</span></div>
+    </div>
+    <div class="fs-stats" id="fsStats"></div>
+    <div class="fs-chart">
+      <p class="fs-chart-label">Tendencia en tiempo real</p>
+      <div class="fs-chart-bars" id="fsChartBars"></div>
+    </div>
+    <div class="fs-form-hint">Edita el valor en el formulario de telemetría para actualizar esta vista.</div>
+  </div>
+
   <script src="/public/app.js"></script>
 </body>
 </html>

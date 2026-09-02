@@ -34,15 +34,29 @@ type Device = {
   disconnect: () => Promise<void>;
 };
 
-function Gauge({ sensor, value, onPress }: { sensor: SensorMeta; value: number; onPress: () => void }) {
+function GaugeTile({ sensor, value, onPress }: { sensor: SensorMeta; value: number; onPress: () => void }) {
+  const [min, max] = sensor.range;
+  const pct = Math.max(0, Math.min(1, (value - min) / (max - min)));
   return (
-    <Pressable style={styles.gauge} onPress={onPress}>
-      <View style={[styles.gaugeHalo, { borderColor: sensor.color }]}>
-        <Text style={styles.gaugeValue}>{formatValue(value, sensor.key)}</Text>
-        <Text style={styles.gaugeUnit}>{sensor.unit}</Text>
+    <Pressable style={styles.tile} onPress={onPress}>
+      <View style={[styles.tileAccent, { backgroundColor: sensor.color }]} />
+      <View style={styles.tileBody}>
+        <View style={styles.tileHeader}>
+          <Text style={styles.tileLabel}>{sensor.label}</Text>
+          <Text style={styles.tilePid}>{sensor.pid}</Text>
+        </View>
+        <View style={styles.tileReadout}>
+          <Text style={[styles.tileValue, { color: sensor.color }]}>{formatValue(value, sensor.key)}</Text>
+          <Text style={styles.tileUnit}>{sensor.unit}</Text>
+        </View>
+        <View style={styles.tileBar}>
+          <View style={[styles.tileBarFill, { width: `${pct * 100}%`, backgroundColor: sensor.color }]} />
+        </View>
+        <View style={styles.tileFooter}>
+          <Text style={styles.tileRange}>{min} – {max}</Text>
+          <Text style={styles.tileExpand}>⤢</Text>
+        </View>
       </View>
-      <Text style={styles.gaugeLabel}>{sensor.label}</Text>
-      <Text style={styles.gaugeHint}>Toca para detalle</Text>
     </Pressable>
   );
 }
@@ -309,7 +323,7 @@ export default function App() {
 
         <View style={styles.cluster}>
           {SENSOR_META.map((sensor) => (
-            <Gauge key={sensor.key} sensor={sensor} value={telemetry[sensor.key]} onPress={() => openSensor(sensor.key)} />
+            <GaugeTile key={sensor.key} sensor={sensor} value={telemetry[sensor.key]} onPress={() => openSensor(sensor.key)} />
           ))}
         </View>
 
@@ -441,13 +455,21 @@ const styles = StyleSheet.create({
   protocolLabel: { color: "#6f9dac", fontSize: 10, fontWeight: "900", letterSpacing: 1.5 },
   protocolValue: { color: "#a8f5ff", fontSize: 13, fontWeight: "900", marginTop: 4 },
   protocolHint: { color: "#597382", fontSize: 10, marginTop: 5 },
-  cluster: { backgroundColor: "#0b1015", borderColor: "#343e47", borderWidth: 1, borderRadius: 14, padding: 18, flexDirection: "row", flexWrap: "wrap", justifyContent: "space-around", gap: 18 },
-  gauge: { width: 138, alignItems: "center" },
-  gaugeHalo: { width: 118, height: 118, borderRadius: 59, borderWidth: 4, backgroundColor: "#080c10", alignItems: "center", justifyContent: "center", shadowColor: "#1adfff", shadowOpacity: 0.2, shadowRadius: 10 },
-  gaugeValue: { color: "#f4f7fb", fontSize: 24, fontWeight: "900", fontVariant: ["tabular-nums"] },
-  gaugeUnit: { color: "#80909c", fontSize: 10, fontWeight: "800", letterSpacing: 1 },
-  gaugeLabel: { color: "#8fa1ad", fontSize: 10, fontWeight: "900", letterSpacing: 1.1, marginTop: 8 },
-  gaugeHint: { color: "#4d6977", fontSize: 9, marginTop: 3 },
+  cluster: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
+  tile: { width: "31.5%", backgroundColor: "#0b1218", borderColor: "#1e333e", borderWidth: 1, borderRadius: 10, overflow: "hidden" },
+  tileAccent: { height: 3, width: "100%" },
+  tileBody: { padding: 10 },
+  tileHeader: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 6 },
+  tileLabel: { color: "#8fa1ad", fontSize: 9, fontWeight: "900", letterSpacing: 1, flexShrink: 1 },
+  tilePid: { color: "#4d6977", fontSize: 8, fontWeight: "700", fontFamily: Platform.OS === "ios" ? "Menlo" : "monospace" },
+  tileReadout: { flexDirection: "row", alignItems: "baseline", gap: 3, marginBottom: 8 },
+  tileValue: { fontSize: 22, fontWeight: "900", fontVariant: ["tabular-nums"] },
+  tileUnit: { color: "#6d8797", fontSize: 9, fontWeight: "800" },
+  tileBar: { height: 4, backgroundColor: "#1a2630", borderRadius: 2, overflow: "hidden" },
+  tileBarFill: { height: "100%", borderRadius: 2 },
+  tileFooter: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 5 },
+  tileRange: { color: "#4d6977", fontSize: 8, fontWeight: "700" },
+  tileExpand: { color: "#3d6977", fontSize: 13, fontWeight: "900" },
   metrics: { flexDirection: "row", justifyContent: "space-between", marginVertical: 14, gap: 10 },
   metric: { flex: 1, backgroundColor: "#0b1218", borderColor: "#1e333e", borderWidth: 1, borderRadius: 8, padding: 12 },
   metricLabel: { color: "#637986", fontSize: 10, fontWeight: "900", letterSpacing: 1.4 },
