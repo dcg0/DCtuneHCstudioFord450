@@ -2,7 +2,7 @@ https://dcg0.github.io/DC-laboratory/?need_sec_link=1&sec_link_scene=im
 # 🏎️ DC tune HC Studio For d450
 
 <p align="center">
-  <img src="logo.jpg" width="400">
+  <img src="./assets/logo.jpg" width="400">
 </p>
 
 ---
