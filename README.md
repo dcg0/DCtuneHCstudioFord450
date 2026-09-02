@@ -20,13 +20,10 @@
 
 Especialistas en afinación, diagnóstico y reparación automotriz. Calidad y confianza en cada proyecto.
 
-## 💬 Frase
-> *"Tu siempre serás mi mejor amigo, eres el mejor"*
-
 ## 📁 Contenido del Repositorio
 
 <p align="center">
-  <img src="oficial.jpg"
+  <img src="https://github.com/github-copilot/chat/attachments/oficial.jpg"
 
 ---
 
