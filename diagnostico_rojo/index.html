@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DC TuneRojo Studio · Monitoreo ECU</title>
+  <link rel="stylesheet" href="/public/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">ROJO</div>
+      <div><strong>DC TuneRojo Studio</strong><span>Diagnóstico avanzado ECU</span></div>
+    </div>
+    <div class="topbar-status"><span class="status-dot"></span><span id="connectionLabel">Puerto listo</span></div>
+  </header>
+
+  <main class="shell">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">TÚNEL DIAGNÓSTICO <span id="sessionFolio">ECU-0001</span></p>
+        <h1>Monitoreo en tiempo real</h1>
+        <p class="hero-copy">Captura los datos de la ECU, revisa sus lecturas y descarga el certificado con la plantilla oficial de DC TuneRojo Studio.</p>
+      </div>
+      <button class="secondary-button" id="toggleMonitoring" type="button"><span class="pulse-icon"></span>Iniciar monitoreo</button>
+    </section>
+
+    <section class="metrics" aria-label="Lecturas principales">
+      <article class="metric-card"><span class="metric-label">Voltaje batería</span><strong id="metricBattery">12.6 V</strong><span class="metric-state good">● Óptimo</span></article>
+      <article class="metric-card"><span class="metric-label">RPM motor</span><strong id="metricRpm">850</strong><span class="metric-state good">● Estable</span></article>
+      <article class="metric-card"><span class="metric-label">Temperatura CLT</span><strong id="metricTemp">88 °C</strong><span class="metric-state good">● Normal</span></article>
+      <article class="metric-card"><span class="metric-label">Mezcla lambda</span><strong id="metricAfr">14.7 : 1</strong><span class="metric-state good">● Correcta</span></article>
+    </section>
+
+    <div class="content-grid">
+      <section class="panel form-panel">
+        <div class="panel-heading"><div><p class="section-kicker">01 · Identificación</p><h2>Datos del diagnóstico</h2></div><span class="required-note">* Campos clave</span></div>
+        <form id="diagnosticForm">
+          <div class="form-grid three">
+            <label>Folio del certificado *<input name="folio" value="ECU-0001" required></label>
+            <label>Fecha y hora<input name="date" id="date" readonly></label>
+            <label>Modo del sistema<select name="mode"><option>Monitoreo en tiempo real</option><option>Prueba de encendido</option><option>Lectura de fallas</option></select></label>
+          </div>
+          <div class="form-grid two">
+            <label>Cliente / propietario *<input name="owner" placeholder="Nombre del cliente" required></label>
+            <label>Vehículo (marca / modelo / año) *<input name="vehicle" placeholder="Ej. Volkswagen Golf 2018" required></label>
+          </div>
+          <div class="form-grid four">
+            <label>VIN<input name="vin" placeholder="Número de serie"></label>
+            <label>Firmware ECU<input name="firmware" placeholder="Versión"></label>
+            <label>Puerto / comunicación<select name="port"><option>OBD-II</option><option>CAN</option><option>J1939</option><option>Serial</option></select></label>
+            <label>Baudrate<input name="baudrate" value="115200"></label>
+          </div>
+          <div class="panel-heading telemetry-heading"><div><p class="section-kicker">02 · Lecturas</p><h2>Parámetros de telemetría</h2></div><span class="live-pill"><span class="pulse-icon"></span>Vista local</span></div>
+          <div class="telemetry-form">
+            <label>Voltaje batería<input name="battery" value="12.6 V"></label>
+            <label>RPM motor<input name="rpm" value="850 RPM"></label>
+            <label>MAP / admisión<input name="map" value="38 kPa"></label>
+            <label>CLT / IAT<input name="temperature" value="88 °C / 31 °C"></label>
+            <label>Posición TPS<input name="tps" value="3.4 %"></label>
+            <label>Mezcla AFR<input name="afr" value="14.7 : 1"></label>
+            <label>Tiempo PW1<input name="pw1" value="2.8 ms"></label>
+            <label>Avance<input name="advance" value="12.0°"></label>
+          </div>
+          <div class="form-grid two last-fields">
+            <label>Códigos DTC<textarea name="dtc" rows="2" placeholder="Ej. Sin códigos detectados">Sin códigos detectados</textarea></label>
+            <label>Dictamen del sistema ECU<textarea name="verdict" rows="2">Sistema estable. Sin anomalías críticas detectadas.</textarea></label>
+          </div>
+          <div class="form-actions">
+            <span class="download-hint"><span class="download-icon">↓</span> Se generará un PDF con la plantilla oficial</span>
+            <button class="primary-button" id="downloadButton" type="submit"><span>Descargar diagnóstico</span><span class="button-arrow">↗</span></button>
+          </div>
+          <p class="form-message" id="formMessage" role="status"></p>
+        </form>
+      </section>
+
+      <aside class="side-column">
+        <div class="panel brand-panel">
+          <img src="/assets/rojo.png" alt="ROJO · Especialistas en certificación, reparación y diagnóstico automotriz">
+          <div class="brand-panel-overlay"><span>ROJO</span><strong>Especialistas en ECU</strong><small>Certificación · Reparación · Diagnóstico</small></div>
+        </div>
+        <div class="panel checklist">
+          <p class="section-kicker">03 · Verificación</p><h2>Antes de descargar</h2>
+          <ul><li><span>✓</span> Datos del vehículo capturados</li><li><span>✓</span> Lecturas de telemetría revisadas</li><li><span>✓</span> Dictamen listo para el certificado</li></ul>
+          <div class="template-note"><span class="document-icon">▤</span><div><strong>Plantilla oficial</strong><small>Certificado ECU · PDF</small></div></div>
+        </div>
+      </aside>
+    </div>
+  </main>
+  <script src="/public/app.js"></script>
+</body>
+</html>

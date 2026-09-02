@@ -1,5 +1,10 @@
 services:
-  web:
+  portal:
+    build: ./portal
+    ports:
+      - "3000:80"
+
+  camion:
     image: node:22
     working_dir: /app
     environment:
@@ -8,11 +13,36 @@ services:
       - CHOKIDAR_USEPOLLING=true
     volumes:
       - ./DCtuneHC:/app
-      - node_modules:/app/node_modules
+      - camion_node_modules:/app/node_modules
     ports:
-      - "3000:3000"
+      - "3001:3001"
     command: >
       bash -lc "npm install --no-audit --no-fund &&
-      npx expo start --web --port 3000 --host lan"
+      npx expo start --web --port 3001 --host lan"
+
+  jeep:
+    image: node:22
+    working_dir: /app
+    environment:
+      - EXPO_NO_TELEMETRY=1
+      - WATCHPACK_POLLING=true
+      - CHOKIDAR_USEPOLLING=true
+    volumes:
+      - ./DCtuneHCjeep/DCtuneHC:/app
+      - jeep_node_modules:/app/node_modules
+    ports:
+      - "3002:3002"
+    command: >
+      bash -lc "npm install --no-audit --no-fund &&
+      npx expo start --web --port 3002 --host lan"
+
+  rojo:
+    build: ./diagnostico_rojo
+    volumes:
+      - ./diagnostico_rojo:/app
+    ports:
+      - "3003:3003"
+
 volumes:
-  node_modules:
+  camion_node_modules:
+  jeep_node_modules:
