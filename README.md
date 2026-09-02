@@ -3,7 +3,7 @@ https://dcg0.github.io/DC-laboratory/?need_sec_link=1&sec_link_scene=im
 
 <p align="center">
   <img src="./assets/logo.jpg" width="350">
-</p>"
+</p>
 
 ---
 
