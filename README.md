@@ -1,11 +1,13 @@
 https://dcg0.github.io/DC-laboratory/?need_sec_link=1&sec_link_scene=im
 # 🏎️ DC tune HC Studio For d450
 
-<p align="center">
-  <img src="./assets/logo.jpg" width="350">
-</p>
+
 
 ---
+
+<p align="center">
+  <img src="https://github.com/github-copilot/chat/attachments/418ec37b-1662-48c7-a800-9245f20271fd" alt="logo.png" width="350">
+</p> 
 
 ## 📱 Escanea nuestro Código QR
 
