@@ -1,0 +1,18 @@
+services:
+  web:
+    image: node:22
+    working_dir: /app
+    environment:
+      - EXPO_NO_TELEMETRY=1
+      - WATCHPACK_POLLING=true
+      - CHOKIDAR_USEPOLLING=true
+    volumes:
+      - ./DCtuneHC:/app
+      - node_modules:/app/node_modules
+    ports:
+      - "3000:3000"
+    command: >
+      bash -lc "npm install --no-audit --no-fund &&
+      npx expo start --web --port 3000 --host lan"
+volumes:
+  node_modules:
