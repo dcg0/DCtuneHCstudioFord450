@@ -26,7 +26,8 @@ Especialistas en afinación, diagnóstico y reparación automotriz. Calidad y co
 ## 📁 Contenido del Repositorio
 
 <p align="center">
-  <img src="" alt="Código QR DC tune HC" width="350">
+  <img src="<img width="663" height="582" alt="oficial" src="https://github.com/user-attachments/assets/c4377e2c-e60d-4fad-a2ce-6818d0c640aa" />
+" alt="Código QR DC tune HC" width="350">
 </p>
 
 ---
