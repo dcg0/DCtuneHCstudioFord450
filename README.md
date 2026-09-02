@@ -24,8 +24,10 @@ Especialistas en afinación, diagnóstico y reparación automotriz. Calidad y co
 > *"Tu siempre serás mi mejor amigo, eres el mejor"*
 
 ## 📁 Contenido del Repositorio
-- **`imagenes/`** → Logo oficial y código QR
-- **`README.md`** → Este archivo
+
+<p align="center">
+  <img src="" alt="Código QR DC tune HC" width="350">
+</p>
 
 ---
 
