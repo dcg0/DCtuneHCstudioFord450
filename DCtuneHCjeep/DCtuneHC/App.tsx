@@ -341,7 +341,8 @@ export default function App() {
 
         <View style={styles.qrFooter}>
           <Image source={require("./assets/qr1_1788306298366.png")} style={styles.qrImage} />
-          <Text style={styles.qrText}>DC TUNE HC · IDENTIDAD VISUAL ADJUNTA</Text>
+          <Image source={require("./assets/qr_pistones.png")} style={styles.qrImage} />
+          <Text style={styles.qrText}>DC TUNE HC · IDENTIDAD VISUAL · PISTONES VERIFICADOS</Text>
         </View>
 
         <Text style={styles.footer}>ELM327 solo lee PIDs OBD-II. La app no escribe mapas, no borra fallas automáticamente y no sustituye una ECU Speeduino.</Text>
@@ -419,6 +420,11 @@ export default function App() {
               </Pressable>
 
               {renderTerminal()}
+
+              <View style={styles.detailQr}>
+                <Image source={require("./assets/qr_pistones.png")} style={styles.detailQrImage} />
+                <Text style={styles.detailQrText}>DC TUNE HC · VERIFICACIÓN PISTÓN {activeMeta.pid}</Text>
+              </View>
             </ScrollView>
           </View>
         )}
@@ -484,7 +490,7 @@ const styles = StyleSheet.create({
   send: { backgroundColor: "#6f4b0c", borderColor: "#ffca58", borderWidth: 1, borderRadius: 6, justifyContent: "center", paddingHorizontal: 16 },
   sendText: { color: "#fff2c9", fontWeight: "900", fontSize: 11 },
   qrFooter: { alignItems: "center", backgroundColor: "#071d35", borderColor: "#195a78", borderWidth: 1, borderRadius: 12, padding: 14, marginTop: 14 },
-  qrImage: { width: 150, height: 150, borderRadius: 8, borderColor: "#2edcff", borderWidth: 1 },
+  qrImage: { width: 120, height: 120, borderRadius: 8, borderColor: "#2edcff", borderWidth: 1, marginHorizontal: 4 },
   qrText: { color: "#8dd9ec", fontSize: 10, letterSpacing: 1.4, fontWeight: "900", marginTop: 8 },
   footer: { color: "#536573", fontSize: 11, lineHeight: 17, marginTop: 15, textAlign: "center" },
   pdfButton: { backgroundColor: "#2b1a05", borderColor: "#d4af37", borderWidth: 1.5, borderRadius: 8, paddingVertical: 14, alignItems: "center", marginTop: 14 },
@@ -516,4 +522,7 @@ const styles = StyleSheet.create({
   tableCell: { color: "#cceaf0", fontSize: 10, width: "33%", fontVariant: ["tabular-nums"] },
   detailInfo: { backgroundColor: "#08151d", borderColor: "#234b5b", borderWidth: 1, borderRadius: 8, padding: 11, marginTop: 12 },
   detailInfoText: { color: "#7ea5b3", fontSize: 11, lineHeight: 17 },
+  detailQr: { alignItems: "center", backgroundColor: "#071d35", borderColor: "#195a78", borderWidth: 1, borderRadius: 12, padding: 14, marginTop: 14 },
+  detailQrImage: { width: 130, height: 130, borderRadius: 8, borderColor: "#2edcff", borderWidth: 1 },
+  detailQrText: { color: "#8dd9ec", fontSize: 10, letterSpacing: 1.2, fontWeight: "900", marginTop: 8 },
 });
