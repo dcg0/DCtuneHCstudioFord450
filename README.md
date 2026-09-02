@@ -23,7 +23,7 @@ Especialistas en afinación, diagnóstico y reparación automotriz. Calidad y co
 ## 📁 Contenido del Repositorio
 
 <p align="center">
-  <img src="https://github.com/github-copilot/chat/attachments/oficial.jpg"
+  <img src="https://docs.github.com/?search-overlay-open=true&search-overlay-ask-ai=true&search-overlay-input=https%3A%2F%2Fgithub.com%2Fsuministrosintegralesdc%2FCertificaciones-ECU-VW%2Ftree%2Fmain"
 
 ---
 
