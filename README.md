@@ -2,7 +2,7 @@
 # 🏎️ DC tune HC Studio For d450
 
 <p align="center">
-  <img src="imagenes/logo-dc-tune-hc.png" alt="DC tune HC Logo" width="650">
+  <img src="imagenes/https://github.com/github-copilot/chat/attachments/418ec37b-1662-48c7-a800-9245f20271fd" alt="DC tune HC Logo" width="650">
 </p>
 
 ---
@@ -10,7 +10,7 @@
 ## 📱 Escanea nuestro Código QR
 
 <p align="center">
-  <img src="imagenes/codigo-qr.png" alt="Código QR DC tune HC" width="350">
+  <img src="https://github.com/github-copilot/chat/attachments/a2436409-31fc-49bd-b4d7-43b7c55a42e5" alt="Código QR DC tune HC" width="350">
 </p>
 
 ---
