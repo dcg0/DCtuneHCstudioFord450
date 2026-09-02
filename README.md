@@ -1,5 +1,4 @@
-    
-    <meta name="viewport" content="width=
+https://dcg0.github.io/DC-laboratory/?need_sec_link=1&sec_link_scene=im
 # 🏎️ DC tune HC Studio For d450
 
 <p align="center">
@@ -27,7 +26,7 @@ Especialistas en afinación, diagnóstico y reparación automotriz. Calidad y co
 <p align="center">
   <img src="https://docs.github.com/?search-overlay-open=true&search-overlay-ask-ai=true&search-overlay-input=https%3A%2F%2Fgithub.com%2Fsuministrosintegralesdc%2FCertificaciones-ECU-VW%2Ftree%2Fmain"
 
----https://github.com/S-I-D-C
+--https://dcg0.github.io/DC-laboratory/?need_sec_link=1&sec_link_scene=im
 
 <p align="center">© 2026 DC tune HC Studio — Todos los derechos reservados</p>
 
