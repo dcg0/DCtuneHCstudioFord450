@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DCtuneRojo — Tablero Digital</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --chrome:conic-gradient(from 215deg,#6d7278 0deg,#c9ced4 24deg,#f4f7fa 48deg,#8f959c 78deg,#565b61 118deg,#c2c8cf 158deg,#eef2f5 196deg,#7c828a 238deg,#4f545a 288deg,#b9bfc7 326deg,#6d7278 360deg);
+      --font-num:"Chakra Petch","Segoe UI",system-ui,sans-serif;
+      --font-ui:"Rajdhani","Segoe UI",system-ui,sans-serif;
+    }
+    body{
+      background:radial-gradient(1200px 700px at 50% 40%,#0a0a0d 0%,#020203 70%);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      min-height:100vh;
+      font-family:var(--font-ui);
+      overflow:hidden;
+      color:#fff;
+    }
+    #stage{width:1420px;height:660px;display:flex;align-items:center;justify-content:center;transform-origin:center center}
+    .cluster{
+      position:relative;
+      width:1360px;
+      height:600px;
+      background:
+        repeating-linear-gradient(90deg,rgba(255,255,255,.014) 0 2px,transparent 2px 5px),
+        linear-gradient(180deg,#101014 0%,#060608 100%);
+      border-radius:18px;
+      overflow:hidden;
+      border:1px solid #26262b;
+      box-shadow:0 0 0 1px #000,0 30px 80px rgba(0,0,0,.9),inset 0 1px 0 rgba(255,255,255,.05),0 0 120px rgba(255,42,0,.05);
+      animation:aparecer .7s cubic-bezier(.2,.7,.2,1) both;
+    }
+    .cluster::after{
+      content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:28;
+      background:linear-gradient(180deg,rgba(255,255,255,.06) 0%,transparent 16%,transparent 82%,rgba(255,255,255,.02) 100%);
+    }
+    @keyframes aparecer{from{opacity:0;transform:scale(.985)}to{opacity:1;transform:scale(1)}}
+    @keyframes subir{from{opacity:0;transform:translateY(18px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+    @keyframes caer{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:translateY(0)}}
+
+    /* Tornillos cromados */
+    .screw{position:absolute;width:15px;height:15px;border-radius:50%;z-index:30;
+      background:radial-gradient(circle at 35% 30%,#eef1f4,#82888f 55%,#3a3e44);
+      box-shadow:0 1px 3px rgba(0,0,0,.85),inset 0 -1px 2px rgba(0,0,0,.6)}
+    .screw::after{content:"";position:absolute;left:2px;right:2px;top:50%;height:2px;margin-top:-1px;background:rgba(0,0,0,.55);border-radius:1px;transform:rotate(38deg)}
+    .screw.tl{top:64px;left:10px}.screw.tr{top:64px;right:10px}.screw.bl{bottom:10px;left:10px}.screw.br{bottom:10px;right:10px}
+
+    .top-bar{
+      position:absolute;
+      top:12px;
+      left:190px;
+      right:30px;
+      height:42px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      z-index:20;
+      animation:caer .6s .35s cubic-bezier(.2,.7,.2,1) both;
+    }
+    .warning-icons{display:flex;gap:18px;align-items:center}
+    .warning-icons svg{width:30px;height:30px;filter:drop-shadow(0 0 4px currentColor);opacity:.92;animation:caer .5s both}
+    .warning-icons svg:nth-child(1){animation-delay:.45s}
+    .warning-icons svg:nth-child(2){animation-delay:.52s}
+    .warning-icons svg:nth-child(3){animation-delay:.59s}
+    .warning-icons svg:nth-child(4){animation-delay:.66s}
+    .warning-icons svg:nth-child(5){animation-delay:.73s}
+    .datetime{font-size:21px;font-weight:600;letter-spacing:2px;color:#d8d8d8;font-variant-numeric:tabular-nums;font-family:var(--font-num)}
+
+    .gauges{
+      position:absolute;
+      top:58px;
+      left:0;
+      right:0;
+      height:424px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:26px;
+    }
+
+    /* ——— Aros cromados ——— */
+    .bezel{
+      position:relative;
+      border-radius:50%;
+      padding:10px;
+      background:var(--chrome);
+      box-shadow:0 8px 22px rgba(0,0,0,.85),0 0 0 1px #000,inset 0 2px 2px rgba(255,255,255,.55),inset 0 -3px 7px rgba(0,0,0,.6);
+      animation:subir .8s cubic-bezier(.2,.7,.2,1) both;
+    }
+    .bezel::before{content:"";position:absolute;inset:6px;border-radius:50%;pointer-events:none;
+      box-shadow:inset 0 1px 2px rgba(255,255,255,.3),inset 0 -2px 6px rgba(0,0,0,.75)}
+    .bezel-izq{animation-delay:.22s}
+    .bezel-der{animation-delay:.38s}
+    .bezel-centro{padding:8px;animation-delay:.08s}
+    .bezel-centro::after{content:"";position:absolute;inset:7px;border-radius:50%;pointer-events:none;
+      border:2px solid rgba(255,42,0,.55);box-shadow:0 0 14px rgba(255,42,0,.3),inset 0 0 8px rgba(255,42,0,.2)}
+
+    .glass{position:absolute;inset:0;border-radius:50%;pointer-events:none;z-index:6;
+      background:radial-gradient(ellipse 130% 62% at 50% -12%,rgba(255,255,255,.11),transparent 55%)}
+
+    /* ——— Medidor Izquierdo ——— */
+    .left-gauge{
+      position:relative;
+      width:300px;
+      height:300px;
+      border-radius:50%;
+      background:radial-gradient(circle at 50% 42%,#151517 0%,#060607 70%);
+      box-shadow:inset 0 0 34px rgba(0,0,0,.95),inset 0 3px 8px rgba(0,0,0,.9);
+    }
+    .left-inner{
+      position:absolute;
+      inset:20px;
+      border-radius:50%;
+      background:#0b0b0c;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      padding:24px 18px;
+      box-shadow:inset 0 0 22px rgba(0,0,0,.8);
+    }
+    .temp-row,.oil-row{display:flex;justify-content:space-between;align-items:center;height:46%}
+    .scale{display:flex;flex-direction:column;justify-content:space-between;height:100%;font-size:15px;color:#9a9a9a;font-weight:700;letter-spacing:.5px}
+    .value-block{display:flex;flex-direction:column;align-items:center;gap:4px}
+    .value-block .icon{font-size:22px;opacity:.9;filter:drop-shadow(0 0 6px rgba(255,255,255,.15))}
+    .value-block .temp{font-size:27px;font-weight:700;letter-spacing:.5px;color:#f4f4f4;font-family:var(--font-num);text-shadow:0 0 14px rgba(255,255,255,.12)}
+    .boost{display:flex;align-items:center;justify-content:center;gap:10px;font-size:22px;font-weight:700;margin:4px 0;color:#e8e8e8;font-family:var(--font-num);text-shadow:0 0 10px rgba(255,255,255,.1)}
+    .boost .bar{width:14px;height:14px;border-radius:50%;background:#4caf50;box-shadow:0 0 12px #4caf50}
+    .oil-row .value-block .temp{font-size:24px}
+    .dots{display:flex;flex-direction:column;gap:5px;align-items:center}
+    .dots span{width:7px;height:7px;border-radius:50%;background:#2a2a2a;transition:background .2s,box-shadow .2s}
+    .dots span.active{background:#4caf50;box-shadow:0 0 6px #4caf50}
+    .dots span.yellow{background:#ffc107;box-shadow:0 0 6px #ffc107}
+
+    /* ——— Medidor Central ——— */
+    .center-gauge{
+      position:relative;
+      width:420px;
+      height:420px;
+      border-radius:50%;
+      background:radial-gradient(circle at 50% 40%,#1a2838 0%,#080e16 62%);
+      box-shadow:inset 0 0 48px rgba(0,0,0,.92),inset 0 4px 10px rgba(0,0,0,.9);
+      z-index:5;
+    }
+    .center-face{position:absolute;inset:22px;border-radius:50%;background:radial-gradient(circle at 50% 38%,#25405e 0%,#0c1622 58%);overflow:hidden;box-shadow:inset 0 0 30px rgba(0,0,0,.6)}
+    .redline{position:absolute;inset:0;transform:rotate(-20deg);pointer-events:none}
+    .tick{position:absolute;top:50%;left:50%;width:2px;height:12px;background:#b8c8d8;transform-origin:0 0}
+    .tick.major{height:20px;width:3px;background:#e4f0ff;box-shadow:0 0 5px rgba(180,210,255,.5)}
+    .numbers-layer{position:absolute;inset:0;pointer-events:none;z-index:2;filter:drop-shadow(0 0 6px rgba(160,200,255,.3))}
+    .numbers-layer text{fill:#d6e6f5;font-size:27px;font-weight:600;font-family:var(--font-num);text-anchor:middle;dominant-baseline:central}
+    .center-black{
+      position:absolute;
+      top:50%;left:50%;
+      width:220px;height:220px;
+      margin:-110px 0 0 -110px;
+      border-radius:50%;
+      background:radial-gradient(circle at 50% 38%,#151517 0%,#000 72%);
+      box-shadow:inset 0 0 30px rgba(0,0,0,.95),0 0 0 1px rgba(255,255,255,.04);
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      z-index:3;
+    }
+    .speed-main{font-size:110px;font-weight:700;line-height:1;letter-spacing:-3px;color:#fff;font-family:var(--font-num);text-shadow:0 0 24px rgba(255,255,255,.2)}
+    .speed-unit{font-size:18px;color:#9a9a9a;margin-top:-4px;letter-spacing:3px;font-weight:600}
+    .odometer{position:absolute;bottom:28px;font-size:18px;color:#b8b8b8;letter-spacing:2.5px;font-variant-numeric:tabular-nums;font-weight:600;font-family:var(--font-num)}
+    .rpm-value{position:absolute;top:30px;font-size:32px;font-weight:700;color:#fff;letter-spacing:1.5px;font-family:var(--font-num);text-shadow:0 0 12px rgba(255,80,40,.35)}
+    .needle{
+      position:absolute;top:50%;left:50%;
+      width:172px;height:5px;
+      background:linear-gradient(90deg,#43474d 0 20px,#ff2a00 20px,#ff6200 72%,transparent 100%);
+      transform-origin:0 50%;transform:rotate(-145deg);
+      z-index:4;border-radius:3px;
+      box-shadow:0 0 14px rgba(255,60,0,.85);
+      transition:transform .12s ease-out;
+    }
+    .needle::after{content:"";position:absolute;right:-6px;top:50%;width:13px;height:13px;margin-top:-6.5px;background:#ff2a00;border-radius:50%;box-shadow:0 0 16px #ff2a00}
+
+    /* ——— Medidor Derecho: COMBUSTIBLE + AFR ——— */
+    .right-gauge{
+      position:relative;
+      width:300px;
+      height:300px;
+      border-radius:50%;
+      background:radial-gradient(circle at 50% 42%,#151517 0%,#060607 70%);
+      box-shadow:inset 0 0 34px rgba(0,0,0,.95),inset 0 3px 8px rgba(0,0,0,.9);
+    }
+    .sensor-inner{
+      position:absolute;
+      inset:20px;
+      border-radius:50%;
+      background:#0b0b0c;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      gap:20px;
+      padding:20px;
+      box-shadow:inset 0 0 22px rgba(0,0,0,.8);
+    }
+    .sensor-block{display:flex;flex-direction:column;align-items:center;width:100%;gap:6px}
+    .sensor-label{font-size:14px;letter-spacing:2px;color:#8a8a8a;text-transform:uppercase;font-weight:700}
+    .sensor-value{font-size:31px;font-weight:700;color:#f2f2f2;letter-spacing:.5px;font-family:var(--font-num);text-shadow:0 0 12px rgba(255,255,255,.12)}
+    .sensor-unit{font-size:14px;color:#999;margin-left:2px}
+    .bar-container{width:100%;height:12px;background:#141416;border-radius:6px;overflow:hidden;border:1px solid #2e2e30;margin-top:4px;box-shadow:inset 0 2px 4px rgba(0,0,0,.8)}
+    .bar-fill{height:100%;width:0%;background:linear-gradient(90deg,#00c853,#69f0ae);border-radius:5px;transition:width .2s ease;box-shadow:0 0 12px rgba(0,200,83,.5)}
+    .bar-fill.medium{background:linear-gradient(90deg,#ffab00,#ffd600);box-shadow:0 0 12px rgba(255,171,0,.5)}
+    .bar-fill.low{background:linear-gradient(90deg,#ff6d00,#ff9100);box-shadow:0 0 12px rgba(255,109,0,.5)}
+    .bar-fill.empty{background:linear-gradient(90deg,#d50000,#ff1744);box-shadow:0 0 12px rgba(213,0,0,.55)}
+    .afr-track{width:100%;height:10px;background:#141416;border-radius:5px;position:relative;margin-top:8px;border:1px solid #2e2e30;box-shadow:inset 0 2px 4px rgba(0,0,0,.8)}
+    .afr-marker{position:absolute;top:-4px;left:50%;transform:translateX(-50%);width:5px;height:18px;background:#ff3d00;border-radius:3px;box-shadow:0 0 9px #ff3d00;transition:left .15s ease}
+    .afr-marker.lean{background:#00e5ff;box-shadow:0 0 9px #00e5ff}
+    .afr-marker.rich{background:#ff1744;box-shadow:0 0 9px #ff1744}
+    .afr-scale{display:flex;justify-content:space-between;width:100%;font-size:11px;color:#666;margin-top:4px;padding:0 5px;font-variant-numeric:tabular-nums}
+
+    /* ——— Zona Inferior ——— */
+    .bottom{
+      position:absolute;
+      bottom:20px;
+      left:0;right:0;
+      height:90px;
+      display:flex;
+      justify-content:center;
+      align-items:flex-end;
+      gap:50px;
+      z-index:10;
+    }
+    .bezel-sm{border-radius:50%;padding:5px;background:var(--chrome);
+      box-shadow:0 4px 12px rgba(0,0,0,.8),0 0 0 1px #000,inset 0 1px 1px rgba(255,255,255,.5),inset 0 -2px 4px rgba(0,0,0,.55);
+      animation:subir .7s cubic-bezier(.2,.7,.2,1) both}
+    .bezel-sm.s1{animation-delay:.55s}.bezel-sm.s2{animation-delay:.7s}.bezel-sm.s3{animation-delay:.85s}
+    .small-circle{
+      width:90px;height:90px;
+      border-radius:50%;
+      background:radial-gradient(circle at 50% 40%,#101012,#080809 75%);
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      box-shadow:inset 0 0 16px rgba(0,0,0,.85);
+    }
+    .small-value{font-size:23px;font-weight:700;color:#fff;letter-spacing:.5px;font-family:var(--font-num);text-shadow:0 0 10px rgba(255,255,255,.14)}
+    .small-unit{font-size:12px;color:#999;margin-top:2px;letter-spacing:1px;font-weight:600}
+    .throttle-area{display:flex;flex-direction:column;align-items:center;gap:6px;margin-bottom:8px;animation:subir .7s .62s cubic-bezier(.2,.7,.2,1) both}
+    .throttle-bar{width:260px;height:12px;background:#121214;border-radius:6px;position:relative;overflow:hidden;border:1px solid #2c2c2e;box-shadow:inset 0 2px 5px rgba(0,0,0,.85)}
+    .throttle-fill{position:absolute;left:0;top:0;height:100%;width:0%;background:linear-gradient(90deg,#00bcd4,#4dd0e1);border-radius:5px;transition:width .1s ease;box-shadow:0 0 14px rgba(0,188,212,.5)}
+    .throttle-label{font-size:13px;letter-spacing:2.5px;color:#7a7a7a;text-transform:uppercase;font-weight:700}
+    .throttle-scale{display:flex;justify-content:space-between;width:260px;font-size:11px;color:#555;margin-top:2px;font-variant-numeric:tabular-nums}
+    .wifi{position:absolute;bottom:28px;right:40px;font-size:24px;color:#4fc3f7;opacity:.88;filter:drop-shadow(0 0 6px rgba(79,195,247,.5));z-index:12}
+    .brand{position:absolute;bottom:5px;left:0;right:0;text-align:center;font-size:10px;letter-spacing:6px;color:#3d3d42;font-weight:700;z-index:12;text-transform:uppercase}
+    .signal{position:absolute;top:95px;font-size:30px;color:#00e676;opacity:.9;z-index:15;animation:parpadeo .5s infinite alternate;text-shadow:0 0 12px #00e676}
+    .signal.left{left:330px;display:none}
+    .signal.right{right:330px;display:none}
+    @keyframes parpadeo{from{opacity:.35}to{opacity:1}}
+    .estado-conexion{
+      position:absolute;top:12px;left:12px;
+      padding:6px 14px;border-radius:6px;
+      font-size:14px;font-weight:700;z-index:35;
+      background:#c62828;color:#fff;letter-spacing:.8px;
+      cursor:pointer;transition:filter .25s,background .25s;box-shadow:0 0 12px rgba(198,40,40,.35);
+      user-select:none;font-family:var(--font-ui);
+    }
+    .estado-conexion:hover{filter:brightness(1.15)}
+    .estado-conexion.conectado{background:#2e7d32;box-shadow:0 0 12px rgba(46,125,50,.4)}
+  </style>
+</head>
+<body>
+  <div id="stage">
+  <div class="cluster">
+    <div class="screw tl"></div><div class="screw tr"></div><div class="screw bl"></div><div class="screw br"></div>
+    <div class="estado-conexion" id="estadoConexion" data-testid="estado-conexion-badge">⚪ DESCONECTADO</div>
+    <div class="top-bar">
+      <div class="warning-icons">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#ffeb3b" stroke-width="1.8"><path d="M4 12h2l1-3h2l1 3h2l1-2h2l1 2h2"/><circle cx="7" cy="16" r="1.5" fill="#ffeb3b"/><circle cx="17" cy="16" r="1.5" fill="#ffeb3b"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="#ff5252" stroke-width="1.8"><path d="M12 3v4M8 7h8l-1 5H9l-1-5z"/><path d="M9 12v6h6v-6"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="#ff5252" stroke-width="1.8"><rect x="6" y="4" width="12" height="16" rx="1"/><path d="M14 12h2"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="#ff5252" stroke-width="1.8"><circle cx="12" cy="10" r="4"/><path d="M8 18c0-2 2-3 4-3s4 1 4 3"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="#40c4ff" stroke-width="1.8"><circle cx="9" cy="12" r="4"/><path d="M13 8l6-2M13 12h7M13 16l6 2"/></svg>
+      </div>
+      <div class="datetime"><span id="date">--.--.----</span>&nbsp;&nbsp;<span id="time">--:--</span></div>
+    </div>
+    <div class="signal left" id="signalIzq">◀</div>
+    <div class="signal right" id="signalDer">▶</div>
+    <div class="gauges">
+      <!-- IZQUIERDO: Refrigerante + Turbo + Aceite -->
+      <div class="bezel bezel-izq">
+      <div class="left-gauge">
+        <div class="left-inner">
+          <div class="temp-row">
+            <div class="scale"><span>H</span><span>C</span></div>
+            <div class="value-block">
+              <div class="icon">🌡</div>
+              <div class="temp" id="coolant-temp" data-testid="coolant-temp-value">--°C</div>
+            </div>
+            <div class="dots" id="puntosRefrigerante">
+              <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            </div>
+          </div>
+          <div class="boost">
+            <span id="boost-value" data-testid="boost-value">-.-- BAR</span>
+            <div class="bar"></div>
+          </div>
+          <div class="oil-row">
+            <div class="scale"><span>H</span><span>C</span></div>
+            <div class="value-block">
+              <div class="icon">🛢</div>
+              <div class="temp" id="oil-temp" data-testid="oil-temp-value">--°C</div>
+            </div>
+            <div class="dots" id="puntosAceite">
+              <span></span><span></span><span></span><span></span><span></span>
+            </div>
+          </div>
+        </div>
+        <div class="glass"></div>
+      </div>
+      </div>
+
+      <!-- CENTRAL: Velocímetro + RPM -->
+      <div class="bezel bezel-centro">
+      <div class="center-gauge">
+        <div class="center-face">
+          <svg class="redline" viewBox="0 0 376 376"><circle cx="188" cy="188" r="158" fill="none" stroke="#ff2a00" stroke-width="7" stroke-linecap="round" stroke-dasharray="82.7 909.5" style="filter:drop-shadow(0 0 6px rgba(255,42,0,.7))"/></svg>
+          <svg class="numbers-layer" viewBox="0 0 376 376">
+            <text x="81.9" y="314.4">0</text>
+            <text x="32.9" y="244.4">1</text>
+            <text x="25.5" y="216.7">2</text>
+            <text x="61.6" y="81.9">3</text>
+            <text x="131.6" y="32.9">4</text>
+            <text x="216.7" y="25.5">5</text>
+            <text x="294.1" y="61.6">6</text>
+            <text x="343.1" y="131.6">7</text>
+            <text x="350.5" y="216.7">8</text>
+          </svg>
+          <div class="tick major" style="transform:rotate(-140deg) translate(0,-172px)"></div>
+          <div class="tick major" style="transform:rotate(-110deg) translate(0,-172px)"></div>
+          <div class="tick major" style="transform:rotate(-80deg) translate(0,-172px)"></div>
+          <div class="tick major" style="transform:rotate(-50deg) translate(0,-172px)"></div>
+          <div class="tick major" style="transform:rotate(-20deg) translate(0,-172px)"></div>
+          <div class="tick major" style="transform:rotate(10deg) translate(0,-172px)"></div>
+          <div class="tick major" style="transform:rotate(40deg) translate(0,-172px)"></div>
+          <div class="tick major" style="transform:rotate(70deg) translate(0,-172px)"></div>
+          <div class="tick major" style="transform:rotate(100deg) translate(0,-172px)"></div>
+          <div class="glass"></div>
+        </div>
+        <div class="needle" id="needle"></div>
+        <div class="center-black">
+          <div class="rpm-value" id="rpm" data-testid="rpm-value">----</div>
+          <div class="speed-main" id="speed" data-testid="speed-value">--</div>
+          <div class="speed-unit">KM/H</div>
+          <div class="odometer" id="odometer" data-testid="odometer-value">------ KM</div>
+        </div>
+      </div>
+      </div>
+
+      <!-- DERECHO: COMBUSTIBLE + AFR/LAMBDA -->
+      <div class="bezel bezel-der">
+      <div class="right-gauge">
+        <div class="sensor-inner">
+          <div class="sensor-block">
+            <div class="sensor-label">⛽ COMBUSTIBLE</div>
+            <div style="display:flex;align-items:baseline;gap:4px">
+              <span class="sensor-value" id="fuel-value" data-testid="fuel-value">--</span>
+              <span class="sensor-unit">%</span>
+            </div>
+            <div class="bar-container"><div class="bar-fill" id="fuel-bar" data-testid="fuel-bar"></div></div>
+          </div>
+          <div class="sensor-block">
+            <div class="sensor-label">🔥 AFR / LAMBDA</div>
+            <div style="display:flex;align-items:baseline;gap:4px">
+              <span class="sensor-value" id="afr-value" data-testid="afr-value">--.--</span>
+              <span class="sensor-unit">:1</span>
+            </div>
+            <div class="afr-track">
+              <div class="afr-marker" id="afr-marker" data-testid="afr-marker"></div>
+            </div>
+            <div class="afr-scale">
+              <span>10.0</span><span>12.0</span><span>14.7</span><span>16.0</span><span>18.0</span>
+            </div>
+          </div>
+        </div>
+        <div class="glass"></div>
+      </div>
+      </div>
+    </div>
+
+    <!-- INFERIOR: Viaje + Acelerador + Temp Exterior + Voltaje -->
+    <div class="bottom">
+      <div class="bezel-sm s1"><div class="small-circle">
+        <div class="small-value" id="trip" data-testid="trip-value">---.-</div>
+        <div class="small-unit">VIAJE KM</div>
+      </div></div>
+      <div class="throttle-area">
+        <div class="throttle-bar"><div class="throttle-fill" id="throttle" data-testid="throttle-fill"></div></div>
+        <div class="throttle-scale"><span>0</span><span>50</span><span>100</span></div>
+        <div class="throttle-label">ACELERADOR %</div>
+      </div>
+      <div class="bezel-sm s2"><div class="small-circle">
+        <div class="small-value" id="outside-temp" data-testid="outside-temp-value">--.-</div>
+        <div class="small-unit">TEMP °C</div>
+      </div></div>
+      <div class="bezel-sm s3"><div class="small-circle">
+        <div class="small-value" id="voltage" data-testid="voltage-value">--.-</div>
+        <div class="small-unit">VOLTS</div>
+      </div></div>
+    </div>
+    <div class="wifi">📶</div>
+    <div class="brand">DCtuneRojo</div>
+  </div>
+  </div>
+
+  <script>
+    // ========== VARIABLES ==========
+    let puertoSerial = null, lector = null, reconexionActiva = true, datosAcumulados = "", kilometrajeTotal = 0;
+    let conectado = false, demoActivo = true;
+
+    // ========== FUNCIONES DE ACTUALIZACIÓN ==========
+    function setSpeed(kmh){document.getElementById('speed').textContent=Math.round(kmh);document.getElementById('needle').style.transform=`rotate(${-145+(kmh*1.6)}deg)`}
+    function setRpm(rpm){document.getElementById('rpm').textContent=Math.round(rpm)}
+    function setCoolantTemp(c){document.getElementById('coolant-temp').textContent=`${Math.round(c)}°C`;actualizarPuntos('puntosRefrigerante',c,40,120)}
+    function setOilTemp(c){document.getElementById('oil-temp').textContent=`${Math.round(c)}°C`;actualizarPuntos('puntosAceite',c,40,120)}
+    function setBoost(bar){document.getElementById('boost-value').textContent=`${bar.toFixed(2)} BAR`}
+    function setThrottle(pct){document.getElementById('throttle').style.width=`${Math.max(0,Math.min(100,pct))}%`}
+    function setTrip(km){document.getElementById('trip').textContent=`${km.toFixed(1)}`}
+    function setOutsideTemp(c){document.getElementById('outside-temp').textContent=`${c.toFixed(1)}`}
+    function setVoltage(v){document.getElementById('voltage').textContent=`${v.toFixed(1)}`}
+    function setOdometer(km){kilometrajeTotal=km;document.getElementById('odometer').textContent=`${Math.round(km)} KM`}
+    function setEstadoConexion(con){const el=document.getElementById('estadoConexion');el.classList.toggle('conectado',con);el.textContent=con?'🟢 CONECTADO':'🔴 DESCONECTADO'}
+    function setSignalIzq(a){document.getElementById('signalIzq').style.display=a?'block':'none'}
+    function setSignalDer(a){document.getElementById('signalDer').style.display=a?'block':'none'}
+
+    // COMBUSTIBLE
+    function setFuel(pct){
+      document.getElementById('fuel-value').textContent=Math.round(pct);
+      const bar=document.getElementById('fuel-bar');
+      bar.style.width=`${pct}%`;
+      bar.classList.remove('medium','low','empty');
+      if(pct<=10)bar.classList.add('empty');
+      else if(pct<=25)bar.classList.add('low');
+      else if(pct<=50)bar.classList.add('medium');
+    }
+
+    // AFR / LAMBDA
+    function setAFR(afr){
+      document.getElementById('afr-value').textContent=afr.toFixed(2);
+      const pos=Math.max(0,Math.min(100,((afr-10)/8)*100));
+      const marker=document.getElementById('afr-marker');
+      marker.style.left=`${pos}%`;
+      marker.classList.remove('lean','rich');
+      if(afr>15.5)marker.classList.add('lean');
+      else if(afr<13.5)marker.classList.add('rich');
+    }
+
+    function actualizarPuntos(id,valor,min,max){
+      const puntos=document.getElementById(id).children;
+      const nivel=Math.round(((valor-min)/(max-min))*(puntos.length-1));
+      for(let i=0;i<puntos.length;i++){
+        puntos[i].classList.remove('active','yellow');
+        if(i<=nivel)puntos[i].classList.add(i>=puntos.length-2?'yellow':'active');
+      }
+    }
+
+    function actualizarHora(){
+      const a=new Date();
+      const p=n=>String(n).padStart(2,'0');
+      document.getElementById('time').textContent=`${p(a.getHours())}:${p(a.getMinutes())}`;
+      document.getElementById('date').textContent=`${p(a.getDate())}.${p(a.getMonth()+1)}.${a.getFullYear()}`;
+    }
+    setInterval(actualizarHora,1000);
+    actualizarHora();
+
+    // ========== AJUSTE A PANTALLA ==========
+    function ajustarPantalla(){
+      const s=Math.round(Math.min(window.innerWidth/1420,window.innerHeight/660)*100)/100;
+      const st=document.getElementById('stage');
+      if('zoom' in st.style){st.style.transform='none';st.style.zoom=s}
+      else{st.style.transform=`scale(${s})`}
+    }
+    window.addEventListener('resize',ajustarPantalla);
+    ajustarPantalla();
+    if(document.fonts&&document.fonts.ready){document.fonts.ready.then(()=>{const svg=document.querySelector('.numbers-layer');if(svg)svg.parentNode.replaceChild(svg.cloneNode(true),svg)})}
+
+    // ========== MODO DEMO (se apaga solo al conectar por serial) ==========
+    const demo={fuel:72,odo:87342.4,trip:128.7,cool:38,oil:45,last:performance.now(),boot:performance.now()};
+    function tickDemo(now){
+      const t=now/1000, dt=Math.min(0.1,(now-demo.last)/1000);
+      demo.last=now;
+      const p=(Math.sin(t*0.10)*0.65+Math.sin(t*0.031+2)*0.35);
+      const fase=Math.max(0,Math.min(1,(p+1)/2));
+      const bt=(now-demo.boot)/1000;
+      let speed,rpm;
+      if(bt<2.4){
+        const k=bt<1.2?bt/1.2:1-(bt-1.2)/1.2;
+        const e=1-Math.pow(1-Math.max(0,Math.min(1,k)),3);
+        speed=180*e;rpm=1000+6000*e;
+      }else{
+        speed=fase*168;
+        rpm=850+fase*5300+Math.sin(t*7)*40;
+      }
+      demo.cool+=(92-demo.cool)*dt*0.03;
+      demo.oil+=(104-demo.oil)*dt*0.02;
+      demo.fuel=Math.max(6,demo.fuel-dt*0.12);
+      demo.odo+=speed*dt/3600;
+      demo.trip+=speed*dt/3600;
+      setSpeed(speed);
+      setRpm(rpm);
+      setCoolantTemp(demo.cool);
+      setOilTemp(demo.oil);
+      setBoost(Math.max(-0.65,(fase-0.35)*1.6));
+      setThrottle(speed>2?Math.min(100,fase*105):0);
+      setFuel(demo.fuel);
+      setAFR(14.7-fase*2.2+Math.sin(t*3)*0.22);
+      setVoltage(13.8+Math.sin(t*0.8)*0.3);
+      setOutsideTemp(24.5+Math.sin(t*0.02)*0.5);
+      setTrip(demo.trip);
+      setOdometer(demo.odo);
+      const cyc=t%14;
+      setSignalIzq(cyc>4&&cyc<6.6);
+      setSignalDer(cyc>9&&cyc<11.6);
+    }
+    function bucle(now){
+      if(demoActivo&&!conectado)tickDemo(now);
+      requestAnimationFrame(bucle);
+    }
+    requestAnimationFrame(bucle);
+
+    // ========== CONEXIÓN SERIAL (clic en el indicador de estado) ==========
+    // Protocolo por línea JSON: {"speed":0,"rpm":0,"coolant":0,"oil":0,"boost":0,"throttle":0,"fuel":0,"afr":14.7,"voltage":0,"outside":0,"trip":0,"odometer":0,"sigL":false,"sigR":false}
+    function procesarLinea(l){
+      let d;
+      try{d=JSON.parse(l)}catch(e){return}
+      if(d.speed!=null)setSpeed(d.speed);
+      if(d.rpm!=null)setRpm(d.rpm);
+      if(d.coolant!=null)setCoolantTemp(d.coolant);
+      if(d.oil!=null)setOilTemp(d.oil);
+      if(d.boost!=null)setBoost(d.boost);
+      if(d.throttle!=null)setThrottle(d.throttle);
+      if(d.fuel!=null)setFuel(d.fuel);
+      if(d.afr!=null)setAFR(d.afr);
+      if(d.voltage!=null)setVoltage(d.voltage);
+      if(d.outside!=null)setOutsideTemp(d.outside);
+      if(d.trip!=null)setTrip(d.trip);
+      if(d.odometer!=null)setOdometer(d.odometer);
+      if(d.sigL!=null)setSignalIzq(d.sigL);
+      if(d.sigR!=null)setSignalDer(d.sigR);
+    }
+    async function conectarSerial(){
+      try{
+        puertoSerial=await navigator.serial.requestPort();
+        await puertoSerial.open({baudRate:9600});
+        conectado=true;demoActivo=false;setEstadoConexion(true);
+        const dec=new TextDecoder();
+        while(puertoSerial.readable&&reconexionActiva){
+          lector=puertoSerial.readable.getReader();
+          try{
+            while(true){
+              const{value,done}=await lector.read();
+              if(done)break;
+              datosAcumulados+=dec.decode(value);
+              let i;
+              while((i=datosAcumulados.indexOf('\n'))>=0){
+                procesarLinea(datosAcumulados.slice(0,i).trim());
+                datosAcumulados=datosAcumulados.slice(i+1);
+              }
+            }
+          }catch(e){}finally{lector.releaseLock()}
+        }
+      }catch(e){
+        conectado=false;demoActivo=true;setEstadoConexion(false);
+      }
+    }
+    async function desconectarSerial(){
+      reconexionActiva=false;
+      try{if(lector)await lector.cancel()}catch(e){}
+      try{if(puertoSerial)await puertoSerial.close()}catch(e){}
+      conectado=false;demoActivo=true;setEstadoConexion(false);
+      reconexionActiva=true;
+    }
+    document.getElementById('estadoConexion').addEventListener('click',()=>{
+      if(conectado){desconectarSerial();return}
+      if('serial' in navigator){conectarSerial()}
+      else{demoActivo=!demoActivo;setEstadoConexion(false)}
+    });
+    setEstadoConexion(false);
+  </script>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3666c4feee90722',t:'MTc4ODYyMzc3Nw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
