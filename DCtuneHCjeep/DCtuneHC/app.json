@@ -1,0 +1,21 @@
+{
+  "expo": {
+    "name": "DC Tune HC Studio",
+    "slug": "dc-tune-hc-studio",
+    "version": "1.0.0",
+    "orientation": "landscape",
+    "userInterfaceStyle": "dark",
+    "assetBundlePatterns": ["**/*"],
+    "android": {
+      "package": "com.dctunehc.studio",
+      "versionCode": 1,
+      "permissions": [
+        "BLUETOOTH",
+        "BLUETOOTH_ADMIN",
+        "BLUETOOTH_CONNECT",
+        "BLUETOOTH_SCAN",
+        "ACCESS_FINE_LOCATION"
+      ]
+    }
+  }
+}
