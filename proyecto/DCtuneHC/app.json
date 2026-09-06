@@ -15,7 +15,30 @@
         "BLUETOOTH_CONNECT",
         "BLUETOOTH_SCAN",
         "ACCESS_FINE_LOCATION"
-      ]
-    }
+      ],
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#1a1a1a"
+      }
+    },
+    "ios": {
+      "bundleIdentifier": "com.dctunehc.studio",
+      "buildNumber": "1",
+      "supportsTabletMode": true,
+      "infoPlist": {
+        "NSBluetoothPeripheralUsageDescription": "La app necesita Bluetooth para conectarse al ELM327",
+        "NSBluetoothCentralUsageDescription": "La app necesita Bluetooth para conectarse al ELM327",
+        "NSLocationWhenInUseUsageDescription": "La app necesita ubicación para escanear dispositivos Bluetooth"
+      }
+    },
+    "web": {
+      "favicon": "./assets/icon.png",
+      "display": "standalone",
+      "scope": "/",
+      "startUrl": "/"
+    },
+    "plugins": [
+      "react-native-bluetooth-classic"
+    ]
   }
 }
