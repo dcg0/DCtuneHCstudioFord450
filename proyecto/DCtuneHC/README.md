@@ -1,45 +1,165 @@
-# DC Tune HC Studio · Android
+# DC Tune HC Studio · Multi-plataforma
 
-Aplicación nativa Expo/React Native para Android. Usa Bluetooth clásico SPP,
-que es el transporte habitual del ELM327 Mini de la fotografía; por eso no
-depende de Web Serial ni de Chrome.
+Aplicación nativa Expo/React Native para **Android, iOS y Web**. Usa Bluetooth clásico SPP en dispositivos móviles, conectándose al ELM327 Mini para monitoreo OBD-II en tiempo real.
 
-## Ejecutar
+---
 
+## 📥 Descargas Rápidas
+
+### 🤖 Android
 ```bash
+# Instalar desde código fuente
 npm install
-npx expo prebuild
+npx expo prebuild --clean
 npx expo run:android
 ```
+**[Descargar APK directamente](#)** | [Guía de instalación](#)
 
-`react-native-bluetooth-classic` necesita un **development build**. Expo Go no
-incluye el módulo nativo y no puede conectarse directamente al ELM327 SPP.
+### 🍎 iOS (macOS requerido)
+```bash
+npm install
+npx expo prebuild --platform ios --clean
+npx expo run:ios
+```
+**[Próximamente en App Store](#)** | [Requisitos](#)
 
-## Flujo
+### 🌐 Web
+```bash
+npm install
+npx expo web
+```
+**[Abrir en navegador](#)** | [Demo en línea](#)
 
-1. Empareja el ELM327 desde Ajustes de Android.
-2. Abre la app y pulsa **BUSCAR ELM327**.
-3. Selecciona el dispositivo emparejado.
-4. La app inicializa ATZ/ATE0/ATL0/ATS0/ATAT1/ATST64/ATSP0, consulta ATDP y
-   solicita la máscara de PIDs `0100` antes de iniciar el sondeo.
-5. Toca cualquier sensor para abrir su pantalla completa: valor actual,
-   gráfica de tendencia, frecuencia observada, mínimo, máximo, promedio y
-   tabla de muestras.
-6. La terminal queda también al final de cada pantalla de sensor. Prueba
-   `ATI`, `ATDP`, `0100`, `010C` o `010D`.
+---
 
-Si el adaptador no aparece, no está emparejado o el clon no implementa un PID,
-la app mantiene el modo DEMO. El ELM327 es solo lectura OBD-II: no modifica
-mapas de la ECU.
+## ⚙️ Requisitos
 
-## PIDs monitorizados
+- **Node.js** 18+
+- **npm** o **yarn**
+- **Expo CLI**: `npm install -g expo-cli`
 
-`010C` RPM, `010D` velocidad, `0105` refrigerante, `010B` MAP, `0111`
-acelerador, `012F` combustible, `0142` voltaje, `010F` aire de admisión y
-`0134` AFR mediante equivalence ratio. La ECU y el clon ELM327 pueden no
-publicar todos los PIDs; la app muestra lo que realmente responde y no
-presenta una lectura DEMO como dato real.
+**Plataforma específica:**
+- **Android**: Android Studio + SDK
+- **iOS**: Xcode (solo macOS)
+- **Web**: Navegador moderno
 
-El arte visual adjunto se muestra al final del tablero como identidad de la
-entrega. No se interpreta como un código QR legible si la imagen no contiene
-un patrón QR.
+---
+
+## 🚀 Compilar para Producción
+
+### Android APK Release
+```bash
+eas build --platform android --release
+```
+
+### iOS App Store
+```bash
+eas build --platform ios
+eas submit --platform ios
+```
+
+### Web Deploy
+```bash
+npm run build
+# Subir carpeta 'dist' a tu hosting
+```
+
+---
+
+## 📋 Flujo de la Aplicación
+
+1. **Empareja el ELM327** desde Ajustes del dispositivo
+2. **Abre la app** y pulsa **BUSCAR ELM327**
+3. **Selecciona** el dispositivo emparejado
+4. La app inicializa automáticamente:
+   - `ATZ` (reset)
+   - `ATE0` (echo off)
+   - `ATL0` (line feed off)
+   - `ATS0` (spaces off)
+   - `ATAT1` (adaptive timing)
+   - `ATST64` (timeout)
+   - `ATSP0` (protocolo automático)
+5. **Consulta ATDP** y solicita máscara de PIDs `0100`
+6. **Toca cualquier sensor** para ver:
+   - Valor actual
+   - Gráfica de tendencia
+   - Frecuencia, mín, máx, promedio
+   - Tabla de muestras
+
+---
+
+## 📊 PIDs Monitorizados
+
+| PID | Parámetro | Unidad |
+|-----|-----------|--------|
+| `010C` | RPM | rev/min |
+| `010D` | Velocidad | km/h |
+| `0105` | Temperatura refrigerante | °C |
+| `010B` | MAP (presión admisión) | kPa |
+| `0111` | Posición acelerador | % |
+| `012F` | Nivel combustible | % |
+| `0142` | Voltaje batería | V |
+| `010F` | Temperatura aire admisión | °C |
+| `0134` | AFR (equivalence ratio) | λ |
+
+> **Nota**: La ECU y el adaptador ELM327 pueden no publicar todos los PIDs. La app muestra solo lo que realmente responde.
+
+---
+
+## 🔧 Configuración Multi-Plataforma
+
+Ver [`app.json`](./app.json) para permisos, identificadores y configuración específica por plataforma:
+
+- **Android**: Permisos Bluetooth, ubicación, versión
+- **iOS**: Bundle ID, privacidad (NSBluetoothCentralUsageDescription)
+- **Web**: Configuración PWA
+
+---
+
+## 🛠️ Desarrollo
+
+### Estructura
+```
+proyecto/DCtuneHC/
+├── app.json           # Configuración Expo
+├── package.json       # Dependencias
+├── App.tsx            # Componente principal
+└── src/
+    ├── components/    # Componentes reutilizables
+    ├── screens/       # Pantallas de la app
+    └── services/      # Servicios (Bluetooth, OBD-II)
+```
+
+### Dependencias principales
+- `react-native@0.79.2`
+- `expo@~53.0.0`
+- `react-native-bluetooth-classic@^1.73.0-rc.17`
+
+### Hot Reload
+```bash
+npx expo start
+# Presiona 'a' para Android, 'i' para iOS, 'w' para web
+```
+
+---
+
+## ⚠️ Limitaciones & Notas Importantes
+
+- `react-native-bluetooth-classic` requiere **development build** (no funciona con Expo Go)
+- **Web**: No soporta Bluetooth clásico SPP, solo lectura simulada
+- **ELM327**: Acceso solo lectura, sin modificación de mapas ECU
+- **Adaptadores clones**: Pueden no soportar todos los PIDs
+
+---
+
+## 📝 Licencia & Derechos
+
+© 2026 DC tune HC Studio — Todos los derechos reservados
+
+---
+
+## 📞 Soporte
+
+- 🐛 [Reportar un bug](#)
+- 💬 [Contacto](#)
+- 🌐 [Sitio web](#)
